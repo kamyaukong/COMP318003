@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Q&A System</title>
+</head>
+<body>
+    <h1>Ask a Question for Cultural Hotspot - Points of Interest</h1>
+    <form method="post">
+        <textarea name="question" rows="2" cols="50"></textarea><br>
+        <input type="submit" value="Submit">
+    </form>
+    {% for qa_pair in qa_pairs %}
+        <h2>Question: {{ qa_pair.question }}</h2>
+        <table border="1">
+            <tr>
+                <th>Site Name</th>
+                <th>Description</th>
+                <th>Interests</th>
+                <th>Score</th>
+            </tr>
+            {% for answer in qa_pair.answers %}
+                <tr>
+                    <td>{{ answer['site_name'] }}</td>
+                    <td>{{ answer['description'] }}</td>
+                    <td>{{ answer['interests'] }}</td>
+                    <td>{{ answer['score'] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endfor %}
+</body>
+</html>
