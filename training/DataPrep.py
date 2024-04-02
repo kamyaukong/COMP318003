@@ -11,6 +11,7 @@ from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.feature_extraction.text import TfidfVectorizer
 from scipy.sparse import hstack
 
 # Define the preprocessing text function
@@ -22,9 +23,12 @@ def preprocess_text(text):
     # Proceed with preprocessing if it's a string
     text = text.lower()
     text = re.sub(r'[^a-zA-Z\s]', '', text)
+    # Word Tokenization - split sentense into word
     tokens = word_tokenize(text)
+    # Stop Words - remove stop words such as: is the a are ...
     stop_words = set(stopwords.words('english'))
     tokens = [token for token in tokens if token not in stop_words]
+    # Lemmatization - 
     lemmatizer = WordNetLemmatizer()
     lemmatized_tokens = [lemmatizer.lemmatize(token) for token in tokens]
     return ' '.join(lemmatized_tokens)
@@ -70,7 +74,7 @@ df['Processed_Description'] = df['Description'].apply(preprocess_text)
 df[['Description', 'Processed_Description']]
 
 # Vectorize the processed text descriptions
-tfidf_vectorizer = TfidfVectorizer()
+tfidf_vectorizer = TfidfVectorizer(max_df=0.85, min_df=2, ngram_range=(1, 2), stop_words='english', norm='l2', use_idf=True)
 tfidf_matrix = tfidf_vectorizer.fit_transform(df['Processed_Description'])
 
 # One-hot encode the 'Interests' column
